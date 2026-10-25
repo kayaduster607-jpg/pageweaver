@@ -1,0 +1,17 @@
+{
+  "python_tests": 15,
+  "python_failures": 0,
+  "ui_tests": 3,
+  "builtin_self_test": "passed",
+  "synthetic_images_only": true,
+  "external_network": false,
+  "env_files_read": 0,
+  "versions": {
+    "requests": "2.34.2",
+    "Pillow": "13.0.0",
+    "img2pdf": "0.6.3",
+    "fastapi": "0.162.0",
+    "uvicorn": "0.54.0",
+    "pikepdf": "10.17.0"
+  }
+}

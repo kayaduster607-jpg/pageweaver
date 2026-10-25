@@ -1,0 +1,27 @@
+# Credentials and browser state are never part of the public project.
+.env
+.env.*
+*.env
+*.har
+*cookies*
+*credentials*
+*.pem
+*.key
+
+# Local runtimes, caches and generated downloads.
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.verification/
+output/
+*_images/
+*.pdf
+*.zip
+*.mp4
+*.bak
+.idea/
+.claude/
+.DS_Store
+Thumbs.db
