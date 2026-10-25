@@ -12,6 +12,39 @@ PageWeaver 是一个本地图片序列归档工具。面对扫描页、课程讲
 
 输入应当是**图片文件的 HTTP(S) 直链**，例如 `https://example.com/book/page_0031.webp`，不是文章页面、论文详情页或现成 PDF 链接。示例域名与参数只用于说明，请替换成自己的合法来源。
 
+## 先用一次：输入什么图片链接，输出哪一个PDF
+
+| 入口 | 输入 | 输出 |
+| --- | --- | --- |
+| 命令行 | 任意一张末尾带编号的图片直链，加起止页和PDF路径 | 指定路径的多页PDF；可选长页、PNG目录 |
+| 本地网页 | 图片直链和起始编号 | 浏览器下载的 `comic_<task_id>.pdf` |
+| `--dry-run` | 一条符合编号格式的示例URL | 终端打印前5个待访问地址，不联网、不生成PDF |
+
+### 无需真实网站，先确认自己理解了输入规则
+
+在项目根目录执行：
+
+```powershell
+.\.venv\Scripts\python.exe -X utf8 image_url_to_pdf.py "https://example.com/book/page_0031.png" --dry-run --descramble none
+```
+
+你会看到从 `page_0001.png` 到 `page_0005.png` 的地址，而不是从31开始。样例链接只用于推导编号模板；要从31开始，显式加 `--start 31`。
+
+### 真正下载一组有权访问的图片
+
+1. 按[快速开始](#3-快速开始)安装依赖，找到真实来源的一张图片直链。把链接在浏览器打开后，应直接显示图片，而不是文章/阅读器页面。
+2. 先用dry-run检查生成的页码、前缀和扩展名。已知总页数时写清 `--end`；普通图片使用 `--descramble none`。
+3. 下载命令格式如下。必须把example.com地址换成你的真实来源；该示例域名不提供这些图片。
+
+```powershell
+.\.venv\Scripts\python.exe -X utf8 image_url_to_pdf.py "https://example.com/book/page_0001.png" --start 1 --end 20 --descramble none --keep-images -o output/book.pdf
+```
+
+4. 正常完成后，打开 `output/book.pdf`；PNG位于PDF旁的 `book_images` 目录。路径已存在时程序可能增加序号，最终位置以终端打印为准。
+5. 想用网页时启动 `image_to_pdf_server.py`，访问 `http://127.0.0.1:8080`，输入同类链接后抓取，结束后点击“下载 PDF”。网页默认只输出多页PDF，不提供长页选项。
+
+**确认成功：**页数应符合实际范围，每页图片能够打开。网页出现“含错误/可能不完整”时，拿到的可能只是已成功获取的前缀页面。`--self-test`生成的是临时测试PDF，检查后会清理，不会给你留一份待阅读的书籍文件。
+
 ## 1. 为什么做这个工具
 
 逐张保存一组图片时，真正容易出错的地方不只是下载：补零编号可能丢失，错误页可能被保存成图片，页面可能存在横条乱序，不同尺寸和透明背景也会影响合成结果。PageWeaver 将这些步骤连成一条可检查的流程。
